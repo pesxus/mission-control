@@ -118,7 +118,7 @@ docker-compose up -d
 ┌─────────────────┐
 │ Docker Container│
 │ Mission Control │
-│   (Port 3000)   │
+│   (Port 3200)   │
 └─────────────────┘
 ```
 
@@ -131,7 +131,7 @@ docker-compose logs mission-control
 
 ### Verificar se porta está aberta
 ```bash
-curl http://localhost:3000
+curl http://localhost:3200
 ```
 
 ### Verificar redes Docker
@@ -170,7 +170,7 @@ docker-compose logs -f watchtower
 sudo ufw allow 22/tcp    # SSH
 sudo ufw allow 80/tcp    # HTTP
 sudo ufw allow 443/tcp   # HTTPS
-sudo ufw allow 3000/tcp  # Mission Control (ou use reverse proxy)
+sudo ufw allow 3200/tcp  # Mission Control (ou use reverse proxy)
 sudo ufw enable
 ```
 
@@ -183,7 +183,7 @@ server {
     server_name mission.seudominio.com;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3200;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
