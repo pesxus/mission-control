@@ -71,14 +71,14 @@ jobs:
             # Pull latest changes
             git pull origin main
 
-            # Pull new Docker image
-            docker-compose pull
+            # Pull latest image(s) from GHCR
+            docker compose pull
 
-            # Restart containers with zero downtime
-            docker-compose up -d --remove-orphans
+            # Restart containers
+            docker compose up -d --remove-orphans
 
             # Clean up old images
             docker image prune -af --filter "until=24h"
 
             # Show status
-            docker-compose ps
+            docker compose ps

@@ -17,7 +17,15 @@ export function Header() {
     const updateClock = () => {
       const now = new Date();
       setTime(now.toLocaleTimeString("en-US", { hour12: false }));
-      setDate(now.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }).toUpperCase());
+      setDate(
+        now
+          .toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          })
+          .toUpperCase()
+      );
     };
     updateClock();
     const id = setInterval(updateClock, 60000); // Update every minute instead of every second
@@ -33,9 +41,6 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <span className="text-xl font-bold tracking-tight text-stone-900">
             MISSION CONTROL
-          </span>
-          <span className="rounded bg-stone-200 px-2 py-0.5 text-xs font-medium text-stone-600">
-            SiteGPT
           </span>
         </Link>
       </div>

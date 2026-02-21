@@ -2,11 +2,8 @@ version: '3.8'
 
 services:
   mission-control:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_CONVEX_URL: ${NEXT_PUBLIC_CONVEX_URL}
+    # Pull the image built by GitHub Actions (GHCR)
+    image: ghcr.io/pesxus/mission-control:latest
     container_name: mission-control
     restart: unless-stopped
     ports:
@@ -26,23 +23,17 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
-  # Watchtower - Atualiza containers automaticamente
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     container_name: watchtower
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=300
-      - WATCHTOWER_LABEL_ENABLE=true
+    # Use flags instead of env to avoid var name confusion across versions
+    command: --cleanup --interval 300 --label-enable
     networks:
       - mission-control-network
 
 networks:
   mission-control-network:
     driver: bridge
-
-volumes:
-  mission-control-data:
