@@ -1,5 +1,7 @@
 # Multi-stage build para Next.js
 FROM node:24-alpine AS base
+ARG NEXT_PUBLIC_CONVEX_URL
+ENV NEXT_PUBLIC_CONVEX_URL=${NEXT_PUBLIC_CONVEX_URL}
 
 # Install dependencies only when needed
 FROM base AS deps

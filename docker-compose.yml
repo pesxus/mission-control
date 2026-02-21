@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_CONVEX_URL: ${NEXT_PUBLIC_CONVEX_URL}
     container_name: mission-control
     restart: unless-stopped
     ports:
@@ -15,7 +17,7 @@ services:
     networks:
       - mission-control-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3200"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -32,8 +34,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - WATCHTOWER_CLEANUP=true
-      - WATCHTAINER_POLL_INTERVAL=300 # Check every 5 minutes
-      - WATCHTOWER_LABEL_ENABLE=true # Only update containers with label
+      - WATCHCONTAINER_POLL_INTERVAL=300
+      - WATCHTOWER_LABEL_ENABLE=true
     networks:
       - mission-control-network
 

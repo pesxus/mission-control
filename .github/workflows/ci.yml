@@ -70,6 +70,8 @@ jobs:
         run: npm ci
 
       - name: Build application
+        env:
+          NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL }}
         run: npm run build
 
       - name: Upload build artifacts
