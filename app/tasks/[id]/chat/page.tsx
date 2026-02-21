@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import type { Id } from "@/convex/_generated/dataModel";
 
@@ -18,19 +18,17 @@ export default function TaskChatPage() {
 
   const [content, setContent] = useState("");
   const [selectedAgentId, setSelectedAgentId] = useState<Id<"agents"> | null>(null);
-
-  useEffect(() => {
-    if (agents?.length && !selectedAgentId) {
-      setSelectedAgentId(agents[0]._id);
-    }
-  }, [agents, selectedAgentId]);
+  
+  // Use first agent as default
+  const defaultAgentId = agents?.[0]?._id ?? null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!content.trim() || !selectedAgentId) return;
+    const currentAgentId = selectedAgentId || defaultAgentId;
+    if (!content.trim() || !currentAgentId) return;
     await sendMessage({
       taskId,
-      fromAgentId: selectedAgentId,
+      fromAgentId: currentAgentId,
       content: content.trim(),
     });
     setContent("");
@@ -137,7 +135,7 @@ export default function TaskChatPage() {
                   Post as
                 </label>
                 <select
-                  value={selectedAgentId ?? ""}
+                  value={(selectedAgentId || defaultAgentId) ?? ""}
                   onChange={(e) =>
                     setSelectedAgentId(e.target.value as Id<"agents">)
                   }

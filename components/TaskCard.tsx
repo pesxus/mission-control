@@ -4,7 +4,6 @@ import { useDraggable } from "@dnd-kit/core";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import type { Doc } from "@/convex/_generated/dataModel";
-import type { Id } from "@/convex/_generated/dataModel";
 import { AgentAvatar } from "./AgentAvatar";
 
 interface TaskCardProps {

@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 interface TaskDetailDrawerProps {
@@ -20,9 +20,6 @@ const STATUS_OPTIONS = [
 ] as const;
 
 export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
-  const [selectedAgentId, setSelectedAgentId] = useState<Id<"agents"> | null>(
-    null
-  );
   const task = useQuery(
     api.tasks.getById,
     taskId ? { id: taskId } : "skip"
@@ -36,18 +33,21 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
   const sendMessage = useMutation(api.messages.create);
   const [messageContent, setMessageContent] = useState("");
   const [localStatus, setLocalStatus] = useState<string>("");
-
-  useEffect(() => {
-    if (task) setLocalStatus(task.status);
-  }, [task]);
-
-  useEffect(() => {
-    if (agents?.length && !selectedAgentId) {
-      setSelectedAgentId(agents[0]._id);
-    }
-  }, [agents, selectedAgentId]);
+  
+  // Set local status when task changes - use initial value pattern
+  const taskStatus = task?.status ?? "";
+  const [selectedAgentId, setSelectedAgentId] = useState<Id<"agents"> | null>(
+    null
+  );
+  
+  // Set first agent as default when agents load
+  const defaultAgentId = agents?.[0]?._id ?? null;
 
   if (!taskId) return null;
+
+  // Use task status directly if local state not set
+  const currentStatus = localStatus || taskStatus;
+  const currentAgentId = selectedAgentId || defaultAgentId;
 
   const handleStatusChange = async (newStatus: string) => {
     setLocalStatus(newStatus);
@@ -59,10 +59,10 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!messageContent.trim() || !selectedAgentId) return;
+    if (!messageContent.trim() || !currentAgentId) return;
     await sendMessage({
       taskId,
-      fromAgentId: selectedAgentId,
+      fromAgentId: currentAgentId,
       content: messageContent.trim(),
     });
     setMessageContent("");
@@ -115,7 +115,7 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
                   Status
                 </label>
                 <select
-                  value={localStatus}
+                  value={currentStatus}
                   onChange={(e) => handleStatusChange(e.target.value)}
                   className="mt-1 w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 >
@@ -212,7 +212,7 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
                       Post as
                     </label>
                     <select
-                      value={selectedAgentId ?? ""}
+                      value={currentAgentId ?? ""}
                       onChange={(e) =>
                         setSelectedAgentId(e.target.value as Id<"agents">)
                       }

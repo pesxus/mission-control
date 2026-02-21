@@ -69,14 +69,6 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
   const agentMap = new Map(agents?.map((a) => [a._id, a]) ?? []);
   const taskMap = new Map(tasks?.map((t) => [t._id, t]) ?? []);
 
-  const agentCounts = activities?.reduce(
-    (acc, a) => {
-      acc[a.agentId] = (acc[a.agentId] ?? 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  ) ?? {};
-
   return (
     <aside className="flex w-[320px] shrink-0 flex-col border-l border-stone-200 bg-white">
       <div className="border-b border-stone-200 p-4">

@@ -5,7 +5,7 @@ import type { Doc } from "@/convex/_generated/dataModel";
 
 describe("TaskCard", () => {
   const mockTask: Doc<"tasks"> = {
-    _id: "task-1" as any,
+    _id: "task-1" as Doc<"tasks">["_id"],
     title: "Test Task",
     description: "This is a test task description",
     status: "inbox",
@@ -13,12 +13,12 @@ describe("TaskCard", () => {
     tags: ["test", "example"],
     createdAt: Date.now() - 3600000, // 1 hour ago
     updatedAt: Date.now() - 1800000, // 30 minutes ago
-    createdBy: "agent-1" as any,
+    createdBy: "agent-1" as Doc<"agents">["_id"],
   };
 
   const mockAgents: Doc<"agents">[] = [
     {
-      _id: "agent-1" as any,
+      _id: "agent-1" as Doc<"agents">["_id"],
       name: "Jarvis",
       role: "Squad Lead",
       level: "lead",
@@ -26,7 +26,7 @@ describe("TaskCard", () => {
       sessionKey: "agent:main:main",
     },
     {
-      _id: "agent-2" as any,
+      _id: "agent-2" as Doc<"agents">["_id"],
       name: "Friday",
       role: "Developer",
       level: "int",
@@ -89,7 +89,7 @@ describe("TaskCard", () => {
   it("should render assignee avatars when assignees present", () => {
     const taskWithAssignees = {
       ...mockTask,
-      assigneeIds: ["agent-1" as any, "agent-2" as any],
+      assigneeIds: ["agent-1" as Doc<"agents">["_id"], "agent-2" as Doc<"agents">["_id"]],
     };
 
     render(

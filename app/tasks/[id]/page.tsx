@@ -4,7 +4,7 @@ import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation } from "convex/react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Id } from "@/convex/_generated/dataModel";
 
 const STATUS_OPTIONS = [
@@ -24,10 +24,9 @@ export default function TaskDetailPage() {
   const updateStatus = useMutation(api.tasks.updateStatus);
 
   const [localStatus, setLocalStatus] = useState<string>("");
-
-  useEffect(() => {
-    if (task) setLocalStatus(task.status);
-  }, [task]);
+  
+  // Use task status directly if local state not set
+  const currentStatus = localStatus || task?.status || "";
 
   const handleStatusChange = async (newStatus: string) => {
     setLocalStatus(newStatus);
@@ -84,7 +83,7 @@ export default function TaskDetailPage() {
                 Status:
               </label>
               <select
-                value={localStatus}
+                value={currentStatus}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 className="rounded-lg border border-stone-200 px-3 py-2 text-sm"
               >
