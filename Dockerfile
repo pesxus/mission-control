@@ -1,8 +1,9 @@
 # Multi-stage build para Next.js
+# Build arg must be declared before the first FROM to be available in all stages
+ARG NEXT_PUBLIC_CONVEX_URL
+
 FROM node:24-alpine AS base
-ARG NEXT_PUBLIC_CONVEX_URL
-ENV NEXT_PUBLIC_CONVEX_URL=${NEXT_PUBLIC_CONVEX_URL}
-ARG NEXT_PUBLIC_CONVEX_URL
+# Make it available during build/prerender
 ENV NEXT_PUBLIC_CONVEX_URL=${NEXT_PUBLIC_CONVEX_URL}
 
 # Install dependencies only when needed
@@ -21,7 +22,11 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Set environment variable for build
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Ensure NEXT_PUBLIC_CONVEX_URL is present in builder stage (Next.js prerender)
+ARG NEXT_PUBLIC_CONVEX_URL
+ENV NEXT_PUBLIC_CONVEX_URL=${NEXT_PUBLIC_CONVEX_URL}
 
 # Build the application
 RUN npm run build
@@ -30,8 +35,8 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -51,7 +56,7 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
 CMD ["node", "server.js"]
