@@ -1,11 +1,98 @@
 @import "tailwindcss";
 
-:root {
-  --foreground-rgb: 38, 38, 38;
-  --background-rgb: 245, 245, 244;
+:root,
+:root.light {
+  --bg-primary: 245, 245, 244;     /* stone-100 */
+  --bg-secondary: 255, 255, 255;    /* white */
+  --bg-tertiary: 250, 250, 249;     /* stone-50 */
+
+  --text-primary: 38, 38, 38;       /* gray-800 */
+  --text-secondary: 120, 113, 108;  /* stone-500 */
+  --text-tertiary: 168, 162, 158;   /* stone-400 */
+
+  --border-primary: 231, 229, 228;
+  --border-secondary: 214, 211, 209;
+
+  --accent-primary: 217, 119, 6;
+  --accent-hover: 245, 158, 11;
+  --accent-bg: 254, 243, 199;
+
+  --success: 34, 197, 94;
+  --success-bg: 220, 252, 231;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+:root.dark {
+  --bg-primary: 28, 25, 23;
+  --bg-secondary: 41, 37, 36;
+  --bg-tertiary: 68, 64, 60;
+
+  --text-primary: 250, 250, 249;
+  --text-secondary: 214, 211, 209;
+  --text-tertiary: 168, 162, 158;
+
+  --border-primary: 68, 64, 60;
+  --border-secondary: 87, 83, 78;
+
+  --accent-primary: 251, 191, 36;
+  --accent-hover: 252, 211, 77;
+  --accent-bg: 254, 243, 199;
+
+  --success: 74, 222, 128;
+  --success-bg: 220, 252, 231;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
 }
+
+:root.midnight {
+  --bg-primary: 15, 23, 42;
+  --bg-secondary: 28, 34, 56;
+  --bg-tertiary: 40, 48, 72;
+
+  --text-primary: 229, 231, 235;
+  --text-secondary: 200, 210, 222;
+  --text-tertiary: 170, 180, 200;
+
+  --border-primary: 60, 68, 90;
+  --border-secondary: 40, 60, 90;
+
+  --accent-primary: 170, 120, 255;
+  --accent-hover: 190, 140, 255;
+  --accent-bg: 39, 43, 75;
+
+  --success: 120, 220, 160;
+  --success-bg: 60, 180, 140;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-md: 0 6px 12px -2px rgb(0 0 0 / 0.65);
+  --shadow-lg: 0 12px 20px -4px rgb(0 0 0 / 0.75);
+}
+
+/* Base */
+body {
+  color: rgb(var(--text-primary));
+  background: rgb(var(--bg-primary));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Midnight code blocks */
+.midnight code, .midnight pre {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.92em;
+}
+
+/* Typography tweaks per theme can map via utilities if needed */
+.theme-border { border-color: rgb(var(--border-primary)); }
+.theme-text-primary { color: rgb(var(--text-primary)); }
+.theme-text-secondary { color: rgb(var(--text-secondary)); }
+.theme-text-tertiary { color: rgb(var(--text-tertiary)); }
+.theme-bg-primary { background-color: rgb(var(--bg-primary)); }
+.theme-bg-secondary { background-color: rgb(var(--bg-secondary)); }
+.theme-bg-tertiary { background-color: rgb(var(--bg-tertiary)); }
+

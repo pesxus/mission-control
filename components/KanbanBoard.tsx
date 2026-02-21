@@ -70,9 +70,9 @@ export function KanbanBoard({ onTaskClick }: KanbanBoardProps) {
 
   if (!tasks) {
     return (
-      <div className="flex h-full flex-col overflow-hidden p-4">
+      <div className="theme-bg-primary flex h-full flex-col overflow-hidden p-4">
         <div className="mb-4 flex items-center justify-between">
-          <div className="h-6 w-40 animate-pulse rounded bg-stone-200" />
+          <div className="h-6 w-40 animate-pulse rounded theme-bg-tertiary" />
         </div>
         <div className="flex gap-4 overflow-x-auto pb-4">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -84,9 +84,9 @@ export function KanbanBoard({ onTaskClick }: KanbanBoardProps) {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden p-4">
+    <div className="theme-bg-primary flex h-full flex-col overflow-hidden p-4">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-stone-800">MISSION QUEUE</h2>
+        <h2 className="theme-text-primary text-lg font-semibold">MISSION QUEUE</h2>
       </div>
 
       <DndContext

@@ -26,15 +26,17 @@ export function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex w-[280px] shrink-0 flex-col rounded-lg border bg-stone-50/80 transition-colors ${
-        isOver ? "border-amber-400 bg-amber-50/50" : "border-stone-200"
+      className={`flex w-[280px] shrink-0 flex-col rounded-lg border transition-colors ${
+        isOver
+          ? "border-amber-400 bg-amber-50/50 dark:border-amber-500 dark:bg-amber-900/20 midnight:border-violet-400 midnight:bg-violet-900/20"
+          : "theme-border theme-bg-tertiary"
       }`}
     >
-      <div className="border-b border-stone-200 px-4 py-3">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+      <div className="theme-border border-b px-4 py-3">
+        <h3 className="theme-text-secondary text-xs font-semibold uppercase tracking-wider">
           {title}
         </h3>
-        <span className="mt-1 block text-lg font-bold text-stone-900">
+        <span className="theme-text-primary mt-1 block text-lg font-bold">
           {tasks.length}
         </span>
       </div>
