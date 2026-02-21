@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mission-control:
     # Pull the image built by GitHub Actions (GHCR)
@@ -29,6 +27,9 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Force Docker API version to avoid "client version 1.25 is too old" errors
+      - DOCKER_API_VERSION=1.44
     # Use flags instead of env to avoid var name confusion across versions
     command: --cleanup --interval 300 --label-enable
     networks:
