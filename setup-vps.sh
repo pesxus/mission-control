@@ -14,6 +14,20 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+# Perguntar URL do Convex
+echo ""
+echo "📝 Configuração do Backend Convex"
+echo "--------------------------------"
+read -p "Digite a URL do seu backend Convex (ex: https://terrific-meadowlark-70.convex.cloud): " CONVEX_URL
+
+if [ -z "$CONVEX_URL" ]; then
+    echo "❌ URL do Convex é obrigatória!"
+    exit 1
+fi
+
+echo "✅ URL configurada: $CONVEX_URL"
+echo ""
+
 # Instalar Docker se não estiver instalado
 if ! command -v docker &> /dev/null; then
     echo "📦 Instalando Docker..."
@@ -53,25 +67,21 @@ if [ ! -d "$PROJECT_DIR/.git" ]; then
     echo "✅ Repositório clonado!"
 else
     echo "✅ Repositório já existe"
+    cd $PROJECT_DIR
+    git pull origin main
+    echo "✅ Repositório atualizado"
 fi
 
-# Criar arquivo .env se não existir
-if [ ! -f "$PROJECT_DIR/.env" ]; then
-    echo "⚙️  Criando arquivo .env..."
-    cd $PROJECT_DIR
-    cat > .env << 'EOF'
+# Criar arquivo .env
+echo "⚙️  Criando arquivo .env..."
+cat > .env << EOF
 # Convex Backend URL
-NEXT_PUBLIC_CONVEX_URL=https://sua-url.convex.cloud
+NEXT_PUBLIC_CONVEX_URL=$CONVEX_URL
 EOF
-    echo "✅ Arquivo .env criado!"
-    echo "⚠️  IMPORTANTE: Edite o arquivo .env com sua URL do Convex"
-else
-    echo "✅ Arquivo .env já existe"
-fi
+echo "✅ Arquivo .env criado com sua URL!"
 
 # Build e start dos containers
 echo "🐳 Iniciando containers..."
-cd $PROJECT_DIR
 docker-compose up -d --build
 
 echo ""
@@ -81,11 +91,19 @@ echo ""
 echo "📊 Status dos containers:"
 docker-compose ps
 echo ""
-echo "🌐 Acesse: http://localhost:3000"
+echo "🌐 Acesse: http://$(curl -s ifconfig.me):3000"
+echo "   Ou: http://localhost:3000"
 echo ""
-echo "📝 Próximos passos:"
-echo "1. Edite o arquivo .env com sua URL do Convex"
-echo "2. Configure os secrets no GitHub (VPS_HOST, VPS_USER, VPS_SSH_KEY)"
-echo "3. Reinicie os containers: docker-compose restart"
+echo "📝 Variável configurada:"
+echo "   NEXT_PUBLIC_CONVEX_URL=$CONVEX_URL"
+echo ""
+echo "🔄 Para atualizar no futuro:"
+echo "   cd /opt/mission-control"
+echo "   git pull origin main"
+echo "   docker-compose pull"
+echo "   docker-compose up -d"
+echo ""
+echo "📖 Logs:"
+echo "   docker-compose logs -f mission-control"
 echo ""
 echo "📖 Documentação completa: DOCKER_DEPLOY.md"
