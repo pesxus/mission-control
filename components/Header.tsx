@@ -5,7 +5,6 @@ import { api } from "@/convex/_generated/api";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CreateTaskModal } from "./CreateTaskModal";
-import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -29,7 +28,7 @@ export function Header() {
       );
     };
     updateClock();
-    const id = setInterval(updateClock, 60000);
+    const id = setInterval(updateClock, 60000); // Update every minute instead of every second
     return () => clearInterval(id);
   }, []);
 
@@ -37,11 +36,10 @@ export function Header() {
   const tasksInQueue = tasks?.filter((t) => t.status !== "done").length ?? 0;
 
   return (
-    <header className="theme-bg-secondary theme-border flex items-center justify-between border-b px-6 py-4 backdrop-blur transition-colors">
+    <header className="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-white/95 backdrop-blur">
       <div className="flex items-center gap-4">
-        <ThemeToggle />
         <Link href="/" className="flex items-center gap-2">
-          <span className="theme-text-primary text-xl font-bold tracking-tight">
+          <span className="text-xl font-bold tracking-tight text-stone-900">
             MISSION CONTROL
           </span>
         </Link>
@@ -50,31 +48,31 @@ export function Header() {
       <div className="flex items-center gap-8">
         <button
           onClick={() => setShowCreateModal(true)}
-          className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 dark:bg-stone-700 dark:hover:bg-stone-600 midnight:bg-slate-700 midnight:hover:bg-slate-600"
+          className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800"
         >
           Create Task
         </button>
         <div className="flex gap-6 text-sm">
-          <span className="theme-text-secondary font-medium">
+          <span className="font-medium text-stone-700">
             {activeAgents} AGENTS ACTIVE
           </span>
-          <span className="theme-text-secondary font-medium">
+          <span className="font-medium text-stone-700">
             {tasksInQueue} TASKS IN QUEUE
           </span>
         </div>
 
         <Link
           href="/tasks"
-          className="theme-text-secondary text-sm font-medium hover:theme-text-primary transition-colors"
+          className="text-sm font-medium text-stone-600 hover:text-stone-900"
         >
           Tasks List
         </Link>
 
-        <div className="theme-text-tertiary flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4 text-sm text-stone-500">
           <span className="font-mono">{time}</span>
           <span>{date}</span>
-          <span className="theme-success flex items-center gap-1.5">
-            <span className="theme-success-bg h-2 w-2 rounded-full" />
+          <span className="flex items-center gap-1.5 text-green-600">
+            <span className="h-2 w-2 rounded-full bg-green-500" />
             ONLINE
           </span>
         </div>
