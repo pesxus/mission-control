@@ -13,21 +13,13 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
-  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'light';
+    const saved = window.localStorage.getItem('mission-control-theme');
+    return isValidTheme(saved) ? saved : 'light';
+  });
 
   useEffect(() => {
-    setMounted(true);
-    // Load theme from localStorage
-    const saved = localStorage.getItem('mission-control-theme');
-    if (isValidTheme(saved)) {
-      setThemeState(saved);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-
     // Apply theme class to html element
     const root = document.documentElement;
     root.classList.remove('light', 'dark', 'midnight');
@@ -35,7 +27,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Save to localStorage
     localStorage.setItem('mission-control-theme', theme);
-  }, [theme, mounted]);
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
@@ -48,10 +40,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       return 'light';
     });
   };
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, cycleTheme }}>
