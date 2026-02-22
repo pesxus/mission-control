@@ -70,9 +70,9 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
   const taskMap = new Map(tasks?.map((t) => [t._id, t]) ?? []);
 
   return (
-    <aside className="flex w-[320px] shrink-0 flex-col border-l border-stone-200 bg-white">
-      <div className="border-b border-stone-200 p-4">
-        <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-stone-500">
+    <aside className="theme-bg-tertiary theme-border flex w-[320px] shrink-0 flex-col border-l transition-colors">
+      <div className="theme-border border-b p-4">
+        <h2 className="theme-text-secondary mb-4 text-xs font-semibold uppercase tracking-wider">
           LIVE FEED
         </h2>
         <div className="mb-3 flex flex-wrap gap-1">
@@ -83,8 +83,8 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
               className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                 (typeFilter === undefined && t.id === "all") ||
                 typeFilter === t.id
-                  ? "bg-stone-900 text-white"
-                  : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                  ? "bg-stone-900 text-white dark:bg-slate-200 dark:text-slate-900 midnight:bg-violet-400 midnight:text-slate-950"
+                  : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 midnight:bg-slate-700 midnight:text-slate-200 midnight:hover:bg-slate-600"
               }`}
             >
               {t.label}
@@ -92,7 +92,7 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-stone-500">All Agents</span>
+          <span className="theme-text-secondary text-xs">All Agents</span>
           {agents?.slice(0, 10).map((a) => (
             <button
               key={a._id}
@@ -101,8 +101,8 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
               }
               className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-semibold transition-all ${
                 agentFilter === a._id
-                  ? "ring-2 ring-stone-900 ring-offset-2 bg-stone-200 text-stone-900"
-                  : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                  ? "ring-2 ring-stone-900 ring-offset-2 bg-stone-200 text-stone-900 dark:ring-slate-200 dark:ring-offset-slate-900 dark:bg-slate-700 dark:text-slate-50 midnight:ring-violet-300 midnight:ring-offset-slate-900 midnight:bg-slate-700 midnight:text-slate-50"
+                  : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 midnight:bg-slate-700 midnight:text-slate-200 midnight:hover:bg-slate-600"
               }`}
               title={a.name}
             >
@@ -120,7 +120,7 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
             ))}
           </div>
         ) : activities.length === 0 ? (
-          <p className="text-sm text-stone-400">No activity yet</p>
+          <p className="theme-text-tertiary text-sm">No activity yet</p>
         ) : (
           <ul className="space-y-3">
             {activities.map((activity) => {
@@ -142,13 +142,13 @@ export function LiveFeed({ onTaskClick }: LiveFeedProps) {
                     }
                     className={`text-left transition-colors ${
                       activity.taskId
-                        ? "cursor-pointer text-stone-700 hover:text-stone-900"
-                        : "cursor-default text-stone-600"
+                        ? "cursor-pointer theme-text-secondary hover:theme-text-primary"
+                        : "cursor-default theme-text-tertiary"
                     }`}
                   >
                     {text}
                   </button>
-                  <p className="mt-0.5 text-xs text-stone-400">
+                  <p className="theme-text-tertiary mt-0.5 text-xs">
                     {formatDistanceToNow(activity.createdAt, {
                       addSuffix: true,
                       locale: ptBR,
