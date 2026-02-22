@@ -51,10 +51,9 @@
 
 /* Midnight: deeper base + violet accent + different typography */
 :root.midnight {
-  /* Premium midnight: deeper base + richer surfaces */
-  --bg-primary: 7, 10, 22;         /* deep ink */
-  --bg-secondary: 14, 19, 36;      /* surface */
-  --bg-tertiary: 24, 32, 54;       /* raised surface */
+  --bg-primary: 10, 14, 28;        /* near-slate-950 */
+  --bg-secondary: 17, 24, 39;      /* slate-900 */
+  --bg-tertiary: 30, 41, 59;       /* slate-800 */
 
   --text-primary: 248, 250, 252;   /* slate-50 */
   --text-secondary: 226, 232, 240; /* slate-200 */
@@ -65,11 +64,7 @@
 
   --accent-primary: 167, 139, 250; /* violet-400 */
   --accent-hover: 196, 181, 253;   /* violet-300 */
-  --accent-bg: 18, 22, 44;         /* deep accent surface */
-
-  /* Premium extras */
-  --glow: 167, 139, 250;           /* same as accent */
-  --glow-soft: 99, 102, 241;       /* indigo-500 */
+  --accent-bg: 24, 28, 48;         /* deep surface */
 
   --success: 52, 211, 153;         /* emerald-400 */
   --success-bg: 6, 95, 70;         /* emerald-900-ish */
@@ -107,36 +102,4 @@ body {
 .theme-dot-success { background-color: rgb(var(--success)); }
 
 .theme-hover-bg:hover { background-color: rgb(var(--bg-tertiary)); }
-
-/* Premium midnight interactions */
-.midnight .theme-hover-bg:hover {
-  background-color: rgb(var(--bg-tertiary));
-  box-shadow:
-    0 0 0 1px rgb(var(--border-secondary) / 0.6),
-    0 0 0 4px rgb(var(--glow) / 0.10),
-    0 12px 28px -18px rgb(0 0 0 / 0.85);
-}
-
-.midnight .premium-card {
-  background: linear-gradient(
-      180deg,
-      rgb(var(--bg-secondary) / 0.92) 0%,
-      rgb(var(--bg-secondary) / 0.78) 100%
-    );
-  border-color: rgb(var(--border-primary) / 0.9);
-  box-shadow:
-    0 0 0 1px rgb(var(--border-secondary) / 0.5),
-    0 14px 34px -22px rgb(0 0 0 / 0.9);
-}
-
-.midnight .premium-card:hover {
-  box-shadow:
-    0 0 0 1px rgb(var(--border-secondary) / 0.8),
-    0 0 0 4px rgb(var(--glow-soft) / 0.12),
-    0 18px 42px -24px rgb(0 0 0 / 0.92);
-}
-
-.midnight .premium-divider {
-  border-color: rgb(var(--border-primary) / 0.7);
-}
 

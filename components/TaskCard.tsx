@@ -38,15 +38,15 @@ export function TaskCard({ task, agents, onClick, isDragging, disableDrag }: Tas
         e.stopPropagation();
         onClick();
       }}
-      className={`premium-card theme-border theme-bg-secondary rounded-lg border p-3 shadow-sm transition-shadow ${
+      className={`rounded-lg border border-stone-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md ${
         disableDrag ? "cursor-default" : "cursor-grab active:cursor-grabbing"
       } ${isDragging ? "opacity-50 shadow-lg" : ""}`}
     >
-      <h3 className="theme-text-primary text-sm font-medium line-clamp-1">
+      <h3 className="text-sm font-medium text-stone-900 line-clamp-1">
         {task.title}
       </h3>
       {task.description && (
-        <p className="theme-text-secondary mt-1 line-clamp-2 text-xs">
+        <p className="mt-1 line-clamp-2 text-xs text-stone-500">
           {task.description}
         </p>
       )}
@@ -56,17 +56,17 @@ export function TaskCard({ task, agents, onClick, isDragging, disableDrag }: Tas
             <AgentAvatar key={a._id} name={a.name} size="sm" />
           ))}
           {assignees.length > 3 && (
-            <span className="theme-text-tertiary text-[10px]">+{assignees.length - 3}</span>
+            <span className="text-[10px] text-stone-400">+{assignees.length - 3}</span>
           )}
         </div>
-        <span className="theme-text-tertiary text-[10px]">{timeAgo}</span>
+        <span className="text-[10px] text-stone-400">{timeAgo}</span>
       </div>
       {tags.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {tags.slice(0, 5).map((tag) => (
             <span
               key={tag}
-              className="theme-bg-tertiary theme-text-secondary rounded px-1.5 py-0.5 text-[10px]"
+              className="rounded bg-stone-100 px-1.5 py-0.5 text-[10px] text-stone-600"
             >
               {tag}
             </span>
