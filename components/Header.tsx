@@ -74,7 +74,7 @@ export function Header() {
           <span className="font-mono">{time}</span>
           <span>{date}</span>
           <span className="theme-success flex items-center gap-1.5">
-            <span className="theme-dot-success h-2 w-2 rounded-full" />
+            <span className="theme-success-bg h-2 w-2 rounded-full" />
             ONLINE
           </span>
         </div>
