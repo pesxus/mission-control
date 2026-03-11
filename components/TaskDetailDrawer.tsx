@@ -63,7 +63,7 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
 
   const handleStatusChange = async (newStatus: string) => {
     // Validation: only allow status change if in inbox and has assignee + description
-    if (task.status === "inbox" && newStatus !== "inbox") {
+    if (task && task.status === "inbox" && newStatus !== "inbox") {
       const hasAssignee = (task.assigneeIds?.length ?? 0) > 0;
       const hasDescription = task.description && task.description.trim().length > 0;
       
