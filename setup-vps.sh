@@ -50,7 +50,7 @@ else
 fi
 
 # Criar diretório do projeto
-PROJECT_DIR="/opt/mission-control"
+PROJECT_DIR="/docker/openclaw-q4o1/data/workspace/code/mission-control"
 if [ ! -d "$PROJECT_DIR" ]; then
     echo "📁 Criando diretório do projeto..."
     mkdir -p $PROJECT_DIR

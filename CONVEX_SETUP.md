@@ -13,7 +13,7 @@ O comando `npx convex dev` não funciona em terminais não-interativos (como est
 **Em seu terminal local (neste VPS):**
 
 ```bash
-cd /data/.openclaw/workspace/mission-control
+cd /docker/openclaw-q4o1/data/workspace/code/mission-control
 npx convex dev
 ```
 
@@ -45,7 +45,7 @@ Depois que terminar, os arquivos `.env.local` e `convex/_generated/` serão cria
 4. **Criar arquivo `.env.local`:**
 
 ```bash
-cd /data/.openclaw/workspace/mission-control
+cd /docker/openclaw-q4o1/data/workspace/code/mission-control
 cat > convex/.env.local << 'EOF'
 NEXT_PUBLIC_CONVEX_URL=https://your-project-id.convex.cloud
 CONVEX_DEPLOYMENT=your-project-id
@@ -59,7 +59,7 @@ Substitua `your-project-id` pelos valores reais.
 5. **Criar geradores de tipos:**
 
 ```bash
-cd /data/.openclaw/workspace/mission-control
+cd /docker/openclaw-q4o1/data/workspace/code/mission-control
 npx convex deployment login
 ```
 
@@ -73,7 +73,7 @@ Isso vai:
 6. **Testar se está funcionando:**
 
 ```bash
-cd /data/.openclaw/workspace/mission-control
+cd /docker/openclaw-q4o1/data/workspace/code/mission-control
 npx convex deployment list
 ```
 
