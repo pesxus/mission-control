@@ -66,8 +66,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /opt/mission-control
-
+            # cd /opt/mission-control
+            cd  /docker/openclaw-q4o1/data/workspace/code/mission-control
             # Pull latest changes
             git pull origin main
 
