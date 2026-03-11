@@ -52,6 +52,9 @@ export function KanbanBoard({ onTaskClick }: KanbanBoardProps) {
     const { active, over } = event;
     if (!over) return;
     const taskId = active.id as Id<"tasks">;
+    const task = tasks?.find((t) => t._id === taskId);
+    if (!task) return;
+    
     let columnId = over.id as string;
     const colByColId = COLUMNS.find((c) => c.id === columnId);
     if (!colByColId) {
@@ -61,7 +64,23 @@ export function KanbanBoard({ onTaskClick }: KanbanBoardProps) {
       }
     }
     const col = COLUMNS.find((c) => c.id === columnId);
-    if (col && col.status !== tasks?.find((t) => t._id === taskId)?.status) {
+    
+    // Validation: only allow status change if in inbox and has assignee + description
+    if (task.status === "inbox" && col && col.status !== "inbox") {
+      const hasAssignee = (task.assigneeIds?.length ?? 0) > 0;
+      const hasDescription = task.description && task.description.trim().length > 0;
+      
+      if (!hasAssignee) {
+        alert("You must assign an agent before moving out of Inbox");
+        return;
+      }
+      if (!hasDescription) {
+        alert("You must add a description before moving out of Inbox");
+        return;
+      }
+    }
+    
+    if (col && col.status !== task.status) {
       updateStatus({ id: taskId, status: col.status });
     }
   };
