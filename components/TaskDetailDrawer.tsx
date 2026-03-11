@@ -3,8 +3,9 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Markdown } from "./Markdown";
 
 interface TaskDetailDrawerProps {
   taskId: Id<"tasks"> | null;
@@ -31,8 +32,10 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
   );
   const updateStatus = useMutation(api.tasks.updateStatus);
   const sendMessage = useMutation(api.messages.create);
+  const assignTask = useMutation(api.tasks.assign);
   const [messageContent, setMessageContent] = useState("");
   const [localStatus, setLocalStatus] = useState<string>("");
+  const [selectedAssignee, setSelectedAssignee] = useState<string>("");
   
   // Set local status when task changes - use initial value pattern
   const taskStatus = task?.status ?? "";
@@ -43,6 +46,15 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
   // Set first agent as default when agents load
   const defaultAgentId = agents?.[0]?._id ?? null;
 
+  // Reset assignee when task changes
+  useEffect(() => {
+    if (task?.assigneeIds?.[0]) {
+      setSelectedAssignee(task.assigneeIds[0]);
+    } else {
+      setSelectedAssignee("");
+    }
+  }, [task?._id, task?.assigneeIds]);
+
   if (!taskId) return null;
 
   // Use task status directly if local state not set
@@ -50,6 +62,21 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
   const currentAgentId = selectedAgentId || defaultAgentId;
 
   const handleStatusChange = async (newStatus: string) => {
+    // Validation: only allow status change if in inbox and has assignee + description
+    if (task.status === "inbox" && newStatus !== "inbox") {
+      const hasAssignee = (task.assigneeIds?.length ?? 0) > 0;
+      const hasDescription = task.description && task.description.trim().length > 0;
+      
+      if (!hasAssignee) {
+        alert("You must assign an agent before moving out of Inbox");
+        return;
+      }
+      if (!hasDescription) {
+        alert("You must add a description before moving out of Inbox");
+        return;
+      }
+    }
+    
     setLocalStatus(newStatus);
     await updateStatus({
       id: taskId,
@@ -66,6 +93,16 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
       content: messageContent.trim(),
     });
     setMessageContent("");
+  };
+
+  const handleAssigneeChange = async (agentId: string) => {
+    setSelectedAssignee(agentId);
+    if (agentId) {
+      await assignTask({
+        id: taskId,
+        assigneeIds: [agentId as Id<"agents">],
+      });
+    }
   };
 
   const agentMap = new Map(agents?.map((a) => [a._id, a]) ?? []);
@@ -131,9 +168,13 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
                 <label className="block text-xs font-medium text-stone-500">
                   Description
                 </label>
-                <p className="mt-1 text-sm text-stone-700">
-                  {task.description || "No description"}
-                </p>
+                <div className="mt-1 text-sm">
+                  {task.description ? (
+                    <Markdown content={task.description} />
+                  ) : (
+                    <span className="text-stone-400">No description</span>
+                  )}
+                </div>
               </div>
 
               {task.tags && task.tags.length > 0 && (
@@ -156,21 +197,46 @@ export function TaskDetailDrawer({ taskId, onClose }: TaskDetailDrawerProps) {
 
               <div>
                 <label className="block text-xs font-medium text-stone-500">
-                  Assignees
+                  Assignee {task.status !== "inbox" ? "(locked)" : ""}
                 </label>
-                <div className="mt-1 flex flex-wrap gap-2">
-                  {(task.assigneeIds ?? []).map((id) => {
-                    const a = agentMap.get(id);
-                    return a ? (
-                      <span
-                        key={id}
-                        className="rounded-full bg-stone-100 px-2 py-1 text-xs font-medium text-stone-700"
-                      >
-                        {a.name}
-                      </span>
-                    ) : null;
-                  })}
-                </div>
+                {task.status === "inbox" ? (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {agents?.map((a) => {
+                      const isSelected = selectedAssignee === a._id || task.assigneeIds?.[0] === a._id;
+                      return (
+                        <button
+                          key={a._id}
+                          type="button"
+                          onClick={() => handleAssigneeChange(a._id)}
+                          className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                            isSelected
+                              ? "bg-amber-500 text-white"
+                              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                          }`}
+                        >
+                          {a.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="mt-1 flex flex-wrap gap-2">
+                    {(task.assigneeIds ?? []).map((id) => {
+                      const a = agentMap.get(id);
+                      return a ? (
+                        <span
+                          key={id}
+                          className="rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700"
+                        >
+                          {a.name}
+                        </span>
+                      ) : null;
+                    })}
+                    {(task.assigneeIds?.length ?? 0) === 0 && (
+                      <span className="text-xs text-stone-400">No assignee</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="border-t border-stone-200 pt-4">

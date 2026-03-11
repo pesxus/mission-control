@@ -167,3 +167,56 @@ export const getById = query({
     return await ctx.db.get(args.id);
   },
 });
+
+// Mutation to delete a task
+export const deleteTask = mutation({
+  args: {
+    id: v.id("tasks"),
+  },
+  handler: async (ctx, args) => {
+    const task = await ctx.db.get(args.id);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    await ctx.db.delete(args.id);
+    return { success: true };
+  },
+});
+
+// Mutation to delete all tasks (for cleanup)
+export const deleteAll = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const tasks = await ctx.db.query("tasks").collect();
+    for (const task of tasks) {
+      await ctx.db.delete(task._id);
+    }
+    return { deleted: tasks.length };
+  },
+});
+
+// Mutation to assign agents to a task
+export const assign = mutation({
+  args: {
+    id: v.id("tasks"),
+    assigneeIds: v.array(v.id("agents")),
+  },
+  handler: async (ctx, args) => {
+    const task = await ctx.db.get(args.id);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+
+    await ctx.db.patch(args.id, {
+      assigneeIds: args.assigneeIds,
+      updatedAt: Date.now(),
+    });
+
+    // Update currentTaskId for assignees
+    for (const agentId of args.assigneeIds) {
+      await ctx.db.patch(agentId, { currentTaskId: args.id });
+    }
+
+    return { success: true };
+  },
+});

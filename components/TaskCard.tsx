@@ -5,6 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { AgentAvatar } from "./AgentAvatar";
+import { MarkdownPreview } from "./Markdown";
 
 interface TaskCardProps {
   task: Doc<"tasks">;
@@ -46,9 +47,9 @@ export function TaskCard({ task, agents, onClick, isDragging, disableDrag }: Tas
         {task.title}
       </h3>
       {task.description && (
-        <p className="mt-1 line-clamp-2 text-xs text-stone-500">
-          {task.description}
-        </p>
+        <div className="mt-1">
+          <MarkdownPreview content={task.description} lines={2} />
+        </div>
       )}
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-1">
